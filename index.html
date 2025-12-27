@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tr²AIL Lab | IIT Kharagpur</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts: Inter (UI) and Merriweather (Headings/Academic) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind Config for Custom Colors/Fonts -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        lab: {
+                            primary: '#047857', // Emerald 700
+                            dark: '#064e3b',    // Emerald 900
+                            accent: '#d97706',  // Amber 600
+                            slate: '#0f172a',   // Slate 900
+                            light: '#f0fdf4',   // Emerald 50
+                            surface: '#ffffff'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        /* Dark mode glass nav override */
+        html.dark .glass-nav {
+            background: rgba(15, 23, 42, 0.9); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        html.dark .text-gradient {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #047857;
+            margin: 1rem auto 0;
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+        html.dark .section-header::after {
+            background: #10b981; /* Emerald 500 in dark mode */
+        }
+
+        /* Slider Styles */
+        .slider-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            z-index: 0;
+        }
+        .slider-image.active {
+            opacity: 0.15; /* Subtle background fade */
+        }
+        html.dark .slider-image.active {
+            opacity: 0.1; /* Even subtler in dark mode */
+        }
+
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        sup {
+            vertical-align: super;
+            font-size: smaller;
+        }
+        /* Hide scrollbar for cleaner look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Custom Scrollbar for Search Results */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 font-sans antialiased flex flex-col min-h-screen transition-colors duration-300 relative">
+
+    <!-- GLOBAL BACKGROUND SVG (Fixed throughout site) -->
+    <div class="fixed inset-0 z-0 opacity-10 dark:opacity-5 pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#047857" stroke-width="0.5" class="dark:stroke-emerald-500"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            <!-- Abstract Node Network -->
+            <circle cx="10%" cy="20%" r="4" fill="#047857" class="animate-pulse dark:fill-emerald-500" />
+            <circle cx="85%" cy="15%" r="6" fill="#047857" class="animate-pulse dark:fill-emerald-500" style="animation-delay: 1s"/>
+            <circle cx="50%" cy="50%" r="3" fill="#047857" class="animate-pulse dark:fill-emerald-500" style="animation-delay: 2s"/>
+            <circle cx="20%" cy="80%" r="5" fill="#047857" class="animate-pulse dark:fill-emerald-500" style="animation-delay: 1.5s"/>
+            <line x1="10%" y1="20%" x2="50%" y2="50%" stroke="#047857" stroke-width="1" opacity="0.3" class="dark:stroke-emerald-500"/>
+            <line x1="85%" y1="15%" x2="50%" y2="50%" stroke="#047857" stroke-width="1" opacity="0.3" class="dark:stroke-emerald-500"/>
+            <line x1="20%" y1="80%" x2="50%" y2="50%" stroke="#047857" stroke-width="1" opacity="0.3" class="dark:stroke-emerald-500"/>
+        </svg>
+    </div>
+
+    <!-- SEARCH OVERLAY (Mobile) -->
+    <div id="search-overlay" class="fixed inset-0 z-[60] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl hidden flex-col transition-all duration-300">
+        <div class="max-w-4xl w-full mx-auto p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Search Lab</h2>
+                <button id="close-search" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="ph ph-x text-2xl text-slate-500"></i>
+                </button>
+            </div>
+            <div class="relative">
+                <i class="ph ph-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-2xl text-slate-400"></i>
+                <input type="text" id="search-input" placeholder="Search publications, people, projects..." 
+                    class="w-full pl-14 pr-4 py-4 text-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-lab-primary outline-none transition dark:text-white">
+            </div>
+            <div id="search-results" class="mt-8 space-y-4 overflow-y-auto max-h-[60vh] custom-scroll">
+                <!-- Results injected here -->
+                <div class="text-center text-slate-400 mt-12">Start typing to search...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-nav shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Branding -->
+                <div class="flex flex-col cursor-pointer group" onclick="router.navigate('home')">
+                    <span class="font-serif font-bold text-2xl text-slate-900 dark:text-slate-100 tracking-tight group-hover:text-lab-primary dark:group-hover:text-emerald-400 transition-colors">Tr<sup>2</sup>AIL Group</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 font-semibold">IIT Kharagpur</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex space-x-6 items-center">
+                    <button onclick="router.navigate('home')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Home</button>
+                    <button onclick="router.navigate('research')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Research</button>
+                    <button onclick="router.navigate('publications')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Publications</button>
+                    <button onclick="router.navigate('team')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Team</button>
+                    <button onclick="router.navigate('projects')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Projects</button>
+                    
+                    <!-- Inline Search Bar -->
+                    <div class="relative group">
+                        <div class="flex items-center bg-slate-100 dark:bg-slate-800/80 rounded-full px-4 py-2 border border-slate-200 dark:border-slate-700 focus-within:border-lab-primary dark:focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-lab-primary/20 dark:focus-within:ring-emerald-500/20 transition-all w-48 focus-within:w-64">
+                            <!-- Explicitly styling the icon for high visibility -->
+                            <i class="ph ph-magnifying-glass text-slate-500 dark:text-slate-300 text-lg flex-shrink-0"></i>
+                            <input type="text" id="navbar-search-input" placeholder="Search..." class="bg-transparent border-none outline-none text-sm ml-2 w-full text-slate-700 dark:text-slate-200 placeholder-slate-400">
+                        </div>
+                        <!-- Dropdown Results -->
+                        <div id="navbar-search-results" class="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl hidden flex-col max-h-96 overflow-y-auto custom-scroll z-50 p-2">
+                            <!-- Results injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none" title="Toggle Theme">
+                        <i class="ph ph-moon text-xl dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block text-yellow-400"></i>
+                    </button>
+
+                    <button onclick="router.navigate('contact')" class="px-6 py-2 bg-lab-primary dark:bg-emerald-600 text-white rounded-full hover:bg-lab-dark dark:hover:bg-emerald-700 transition font-medium text-sm shadow-md transform hover:-translate-y-0.5">Join Us</button>
+                </div>
+
+                <!-- Mobile Button -->
+                <div class="lg:hidden flex items-center space-x-4">
+                     <!-- Mobile Search Toggle -->
+                     <button id="mobile-search-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none">
+                        <i class="ph ph-magnifying-glass text-xl"></i>
+                    </button>
+
+                     <!-- Mobile Theme Toggle -->
+                     <button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none">
+                        <i class="ph ph-moon text-xl dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block text-yellow-400"></i>
+                    </button>
+
+                    <!-- Hamburger Button -->
+                    <button id="mobile-menu-btn" class="text-slate-600 dark:text-slate-300 hover:text-lab-primary p-2 focus:outline-none">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-4 space-y-2 shadow-xl absolute w-full z-50">
+            <button onclick="router.navigate('home')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Home</button>
+            <button onclick="router.navigate('research')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Research</button>
+            <button onclick="router.navigate('publications')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Publications</button>
+            <button onclick="router.navigate('team')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Team</button>
+            <button onclick="router.navigate('projects')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Projects</button>
+            <button onclick="router.navigate('contact')" class="block w-full text-left py-3 text-lab-primary dark:text-emerald-400 font-bold">Join Us</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow relative z-10" id="app-container">
+        
+        <!-- HOME SECTION -->
+        <section id="home-view" class="view-section animate-fade-in">
+            
+            <!-- Hero with Background Slider -->
+            <div class="relative pt-32 pb-12 md:pt-40 md:pb-16 overflow-hidden transition-colors duration-300">
+                
+                <!-- Image Slider -->
+                <div id="hero-slider" class="absolute inset-0 z-0">
+                    <!-- Images will be injected by JS -->
+                </div>
+                
+                <!-- Gradient Overlay -->
+                <div class="absolute inset-0 z-0 bg-gradient-to-b from-white/95 via-white/80 to-transparent dark:from-slate-950/95 dark:via-slate-950/80 dark:to-transparent"></div>
+
+                <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
+                    <div class="inline-block animate-float">
+                        <h1 class="text-6xl md:text-8xl font-serif font-black text-slate-900 dark:text-slate-100 leading-tight mb-2 tracking-tight transition-colors">
+                            Tr<sup class="text-4xl md:text-6xl text-lab-primary dark:text-emerald-500">2</sup>AIL
+                        </h1>
+                    </div>
+                    
+                    <h2 class="text-xl md:text-3xl font-medium text-slate-600 dark:text-slate-400 mb-8 max-w-3xl mx-auto tracking-wide border-b-2 border-lab-accent/30 dark:border-amber-500/30 pb-4 inline-block transition-colors">
+                        Trust & Transparency in AI through Logic
+                    </h2>
+                    
+                    <div class="max-w-4xl mx-auto text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed mb-12 font-light transition-colors">
+                        <p class="mb-6">
+                            Led by <strong>Prof. Somak Aditya</strong> at IIT Kharagpur, our research group bridges the gap between neural learning and symbolic reasoning. We aim to build AI systems that can <em>reason-in-the-wild</em> transparently, making them robust, interpretable, and human-aware.
+                        </p>
+                        <p class="text-sm md:text-base text-slate-500 dark:text-slate-500 italic">
+                            Supported by Microsoft, Rakuten, Toloka AI, SERB DST, and AI4CPS.
+                        </p>
+                    </div>
+
+                    <!-- Hiring Callout (Styled Box) -->
+                    <div class="max-w-3xl mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-lab-primary/20 dark:border-emerald-500/30 rounded-xl p-6 md:p-8 mb-10 shadow-lg relative overflow-hidden text-left transform transition hover:scale-[1.01]">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-lab-primary dark:bg-emerald-500"></div>
+                        <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                            <div>
+                                <h3 class="text-lab-primary dark:text-emerald-400 font-bold text-lg mb-2 flex items-center gap-2">
+                                    <i class="ph ph-student text-2xl"></i> PhD Positions Open
+                                </h3>
+                                <p class="text-slate-600 dark:text-slate-400 text-sm">
+                                    Looking for motivated students interested in <strong>Neuro-symbolic AI</strong>.
+                                </p>
+                            </div>
+                            <button onclick="document.getElementById('faqs').scrollIntoView({behavior: 'smooth'})" class="whitespace-nowrap px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                Read FAQs &rarr;
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="router.navigate('research')" class="px-8 py-3 bg-slate-900 dark:bg-slate-800 text-white rounded-lg font-medium shadow-xl shadow-slate-900/10 hover:bg-lab-primary dark:hover:bg-emerald-600 transition transform hover:-translate-y-1">
+                            Our Research
+                        </button>
+                        <button onclick="router.navigate('publications')" class="px-8 py-3 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-lab-primary hover:text-lab-primary dark:hover:text-emerald-400 transition backdrop-blur-sm">
+                            Publications
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Team Preview -->
+            <div class="pt-10 pb-20 bg-transparent dark:bg-transparent transition-colors">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="section-header">
+                        <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">Research Team</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
+                        <!-- Faculty 1 -->
+                        <div class="text-center group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                            <div class="relative w-32 h-32 mx-auto mb-4 rounded-full p-1 border-2 border-slate-100 dark:border-slate-800 group-hover:border-lab-primary dark:group-hover:border-emerald-500 transition duration-300">
+                                <img src="https://api.placeholder.com/200?text=SA" alt="Prof Somak Aditya" class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition duration-500">
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-200">Prof. Somak Aditya</h3>
+                            <p class="text-xs font-bold uppercase tracking-wider text-lab-primary dark:text-emerald-500 mt-1">Principal Investigator</p>
+                        </div>
+                        <!-- Faculty 2 -->
+                        <div class="text-center group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                            <div class="relative w-32 h-32 mx-auto mb-4 rounded-full p-1 border-2 border-slate-100 dark:border-slate-800 group-hover:border-lab-primary dark:group-hover:border-emerald-500 transition duration-300">
+                                <img src="https://api.placeholder.com/200?text=PD" alt="Collaborator" class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition duration-500">
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-200">Prof. Priya Das</h3>
+                            <p class="text-xs font-bold uppercase tracking-wider text-lab-primary dark:text-emerald-500 mt-1">Collaborator</p>
+                        </div>
+                         <!-- Student Highlight 1 -->
+                        <div class="text-center group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                             <div class="relative w-32 h-32 mx-auto mb-4 rounded-full p-1 border-2 border-slate-100 dark:border-slate-800 group-hover:border-slate-300 transition duration-300">
+                                <img src="https://api.placeholder.com/200?text=Soham" alt="Student" class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition duration-500">
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-200">Soham Gupta</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">PhD Scholar</p>
+                        </div>
+                         <!-- Student Highlight 2 -->
+                         <div class="text-center group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-xl p-4 shadow-sm">
+                             <div class="relative w-32 h-32 mx-auto mb-4 rounded-full p-1 border-2 border-slate-100 dark:border-slate-800 group-hover:border-slate-300 transition duration-300">
+                                <img src="https://api.placeholder.com/200?text=Kavita" alt="Student" class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition duration-500">
+                            </div>
+                            <h3 class="font-bold text-slate-900 dark:text-slate-200">Kavita Singh</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">PhD Scholar</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="router.navigate('team')" class="inline-flex items-center text-slate-600 dark:text-slate-400 font-semibold hover:text-lab-primary dark:hover:text-emerald-400 transition bg-white/50 dark:bg-slate-800/50 px-4 py-2 rounded-full shadow-sm">
+                            View all Members <i class="ph ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Latest News -->
+            <div class="py-20 bg-slate-50/80 dark:bg-slate-950/80 border-y border-slate-200 dark:border-slate-800 transition-colors backdrop-blur-sm">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                     <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                        <div class="text-center md:text-left w-full">
+                            <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">Latest News</h2>
+                        </div>
+                        <button class="whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hover:text-lab-primary dark:hover:text-emerald-400 font-medium">Archive &rarr;</button>
+                    </div>
+
+                    <div id="home-news-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="loader mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Grant Support Cards -->
+            <div class="py-20 bg-transparent dark:bg-transparent transition-colors">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="section-header">
+                        <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">Grant Support</h2>
+                        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-2xl mx-auto text-sm">
+                            We are grateful for the generous support from our academic and industry partners.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Grant Card 1 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-lab-light dark:group-hover:text-emerald-900/30 transition-colors duration-300"><i class="ph ph-currency-inr text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-slate-800 dark:bg-slate-950 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">ANRF ARG</span>
+                                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-bold border border-slate-200 dark:border-slate-600 px-2 py-1 rounded">2025-29</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ INR 96 Lakhs</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed">PrahelikaAI: Democratizing Education through Neurosymbolic Puzzle solvers in an Indian Context</h3>
+                            </div>
+                        </div>
+
+                        <!-- Grant Card 2 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                            <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-blue-50 dark:group-hover:text-blue-900/30 transition-colors duration-300"><i class="ph ph-microsoft-logo text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Microsoft AARI</span>
+                                    <span class="text-[10px] text-slate-500 dark:text-slate-400 font-bold border border-slate-200 dark:border-slate-600 px-2 py-1 rounded">2024-26</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ $226k</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed mb-3">Agentic Verifiers: Provably Safe Test-time scaling for Reasoning Models</h3>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-auto pt-3 border-t border-slate-50 dark:border-slate-700">Co-PIs: S. Bhattacharya, U.S. Ranjan, A. Sharma</p>
+                            </div>
+                        </div>
+
+                        <!-- Grant Card 3 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                             <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-blue-50 dark:group-hover:text-blue-900/30 transition-colors duration-300"><i class="ph ph-microsoft-logo text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Microsoft AFMR</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ $8,000 Azure</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed mb-3">Education Video Copilot: AI Teaching Assistant</h3>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-auto pt-3 border-t border-slate-50 dark:border-slate-700">Co-PI: Tanuja Ganu (MSR India)</p>
+                            </div>
+                        </div>
+
+                        <!-- Grant Card 4 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                             <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-purple-50 dark:group-hover:text-purple-900/30 transition-colors duration-300"><i class="ph ph-cpu text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">AI4CPS IHUB</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ INR 1.06 Cr</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed mb-3">Using LLMs to enhance learning efficiency in Indian education</h3>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-auto pt-3 border-t border-slate-50 dark:border-slate-700">Main PI: Prof. Pawan Goyal</p>
+                            </div>
+                        </div>
+
+                        <!-- Grant Card 5 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                             <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-amber-50 dark:group-hover:text-amber-900/30 transition-colors duration-300"><i class="ph ph-bank text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-slate-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">SERB DST SRG</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ INR 26 Lakhs</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed">Learning from Rules and Data for Image Analytics</h3>
+                            </div>
+                        </div>
+                        
+                         <!-- Grant Card 6 -->
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-lab-primary/30 dark:hover:border-emerald-500/30 transition duration-300 flex flex-col h-full relative overflow-hidden group">
+                             <div class="absolute -right-4 -top-4 text-slate-50 dark:text-slate-700 group-hover:text-orange-50 dark:group-hover:text-orange-900/30 transition-colors duration-300"><i class="ph ph-robot text-9xl"></i></div>
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Toloka AI</span>
+                                </div>
+                                <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">~ $300</div>
+                                <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed">Infusing Language Model with Affordances</h3>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Recent Works (Dark Section) -->
+            <div class="py-24 bg-slate-900 dark:bg-black text-white relative overflow-hidden transition-colors">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-lab-primary rounded-full blur-3xl opacity-10 -mr-20 -mt-20"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-lab-accent rounded-full blur-3xl opacity-5 -ml-16 -mb-16"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                        <div>
+                            <h2 class="text-3xl font-serif font-bold text-white">Recent Works</h2>
+                            <p class="text-slate-400 mt-2">Code, Datasets, and Benchmarks.</p>
+                        </div>
+                        <a href="#" class="text-lab-accent hover:text-white transition mt-4 md:mt-0 flex items-center font-medium">Visit GitHub <i class="ph ph-arrow-up-right ml-2"></i></a>
+                    </div>
+                    
+                    <!-- Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- NLKI (2025) -->
+                        <div class="bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-lab-primary/20 text-lab-primary px-2 py-1 rounded text-[10px] font-bold border border-lab-primary/20">2025</span>
+                                <i class="ph ph-code text-xl text-slate-500 group-hover:text-white transition"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-white">NLKI Framework</h3>
+                            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">Lightweight Natural Language Knowledge Integration for Improving Small VLMs in Commonsense VQA.</p>
+                            <a href="#" class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">Code & Models <i class="ph ph-arrow-right"></i></a>
+                        </div>
+
+                         <!-- MathSensei (2024) -->
+                         <div class="bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-lab-primary/20 text-lab-primary px-2 py-1 rounded text-[10px] font-bold border border-lab-primary/20">2024</span>
+                                <i class="ph ph-code text-xl text-slate-500 group-hover:text-white transition"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-white">MathSensei</h3>
+                            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">A Tool-Augmented LLM for Mathematical Reasoning.</p>
+                            <a href="#" class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">Code & Data <i class="ph ph-arrow-right"></i></a>
+                        </div>
+
+                        <!-- LogiGLUE (2023) -->
+                        <div class="bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-[10px] font-bold border border-blue-500/20">2023</span>
+                                <i class="ph ph-database text-xl text-slate-500 group-hover:text-white transition"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-white">LogiGLUE & LogiT5</h3>
+                            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">Broad-coverage benchmark for Logical Reasoning and specialized LLM.</p>
+                            <a href="#" class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">View Benchmark <i class="ph ph-arrow-right"></i></a>
+                        </div>
+
+                        <!-- TaxiXNLI (2022) -->
+                        <div class="bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-[10px] font-bold border border-blue-500/20">2022</span>
+                                <i class="ph ph-database text-xl text-slate-500 group-hover:text-white transition"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-white">TaxiXNLI Dataset</h3>
+                            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">Semi-automated type-annotated Multilingual dataset for NLI.</p>
+                            <a href="#" class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">Download <i class="ph ph-arrow-right"></i></a>
+                        </div>
+
+                        <!-- TaxiNLI (2020) -->
+                        <div class="bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded text-[10px] font-bold border border-blue-500/20">2020</span>
+                                <i class="ph ph-database text-xl text-slate-500 group-hover:text-white transition"></i>
+                            </div>
+                            <h3 class="text-lg font-bold mb-2 text-white">TaxiNLI & LoNLI</h3>
+                            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">Crowdsourced and synthetic reasoning type-annotated data for NLI.</p>
+                            <a href="#" class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">Download <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. FAQs (Prospective Students) -->
+            <div class="py-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm transition-colors" id="faqs">
+                <div class="max-w-4xl mx-auto px-4">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">For Prospective Students</h2>
+                        <div class="w-16 h-1 bg-lab-primary dark:bg-emerald-500 mx-auto mt-4 opacity-50"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <!-- FAQ 1 -->
+                        <details class="bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 group transition-all duration-300 open:shadow-md">
+                            <summary class="flex justify-between items-center p-6 cursor-pointer font-medium text-slate-800 dark:text-slate-200 hover:text-lab-primary dark:hover:text-emerald-400 transition">
+                                What projects will I work on?
+                                <span class="transition-transform duration-300 group-open:rotate-180 text-lab-primary dark:text-emerald-500"><i class="ph ph-caret-down font-bold"></i></span>
+                            </summary>
+                            <div class="px-6 pb-6 text-slate-700 dark:text-slate-300 text-sm leading-relaxed border-t border-slate-200/50 dark:border-slate-700 pt-4 animate-fade-in">
+                                <p class="mb-3 font-semibold text-slate-900 dark:text-slate-100">Key Research Questions:</p>
+                                <ul class="list-disc pl-5 space-y-2 mb-4 text-slate-600 dark:text-slate-400">
+                                    <li>How do we reason transparently? What does it mean to reason transparently?</li>
+                                    <li>What are the complimentary reasoning abilities of neural and symbolic logical methods?</li>
+                                    <li>How do we reason with noisy/incomplete knowledge sources?</li>
+                                    <li>How do we elicit missing knowledge with Human-in-the-loop?</li>
+                                </ul>
+                            </div>
+                        </details>
+                        
+                        <!-- FAQ 2 -->
+                        <details class="bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 group transition-all duration-300 open:shadow-md">
+                            <summary class="flex justify-between items-center p-6 cursor-pointer font-medium text-slate-800 dark:text-slate-200 hover:text-lab-primary dark:hover:text-emerald-400 transition">
+                                Is my expertise right for this lab?
+                                <span class="transition-transform duration-300 group-open:rotate-180 text-lab-primary dark:text-emerald-500"><i class="ph ph-caret-down font-bold"></i></span>
+                            </summary>
+                            <div class="px-6 pb-6 text-slate-700 dark:text-slate-300 text-sm leading-relaxed border-t border-slate-200/50 dark:border-slate-700 pt-4 animate-fade-in">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Essential Skills</h4>
+                                        <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
+                                            <li>Python & Shell Scripting</li>
+                                            <li>Git & Basic GPU knowledge</li>
+                                            <li>Algorithms, Probability & Statistics</li>
+                                            <li>IIT KGP Students: A in PDS Theory/Lab</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 dark:text-slate-100 mb-2">Desirable Bonus</h4>
+                                        <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-400">
+                                            <li>Logic & Formal Methods</li>
+                                            <li>Deep Learning / Machine Learning</li>
+                                            <li>Traditional NLP/Linguistics</li>
+                                            <li>Open Source Contributions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <!-- FAQ 3 -->
+                        <details class="bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 group transition-all duration-300 open:shadow-md">
+                            <summary class="flex justify-between items-center p-6 cursor-pointer font-medium text-slate-800 dark:text-slate-200 hover:text-lab-primary dark:hover:text-emerald-400 transition">
+                                How do I apply?
+                                <span class="transition-transform duration-300 group-open:rotate-180 text-lab-primary dark:text-emerald-500"><i class="ph ph-caret-down font-bold"></i></span>
+                            </summary>
+                            <div class="px-6 pb-6 text-slate-700 dark:text-slate-300 text-sm leading-relaxed border-t border-slate-200/50 dark:border-slate-700 pt-4 animate-fade-in">
+                                <div class="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <p class="mb-2"><strong class="text-lab-primary dark:text-emerald-400">IIT KGP Students:</strong> Email Prof. Aditya with your program details.</p>
+                                    <p class="mb-2"><strong class="text-lab-primary dark:text-emerald-400">PhD/MS Applicants:</strong> Apply via the official IIT Kharagpur admission portal.</p>
+                                    <p class="mb-0"><strong class="text-lab-primary dark:text-emerald-400">Internships:</strong> Open to 1-2 exceptional external students with proven publication/coding track record.</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- OTHER SECTIONS (Research, Pubs, Team, etc.) -->
+        <section id="research-view" class="view-section hidden">
+             <div class="bg-slate-50 dark:bg-slate-950 py-24 transition-colors">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h2 class="text-4xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-12">Research Areas</h2>
+                     <div class="grid md:grid-cols-2 gap-8 text-left">
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                            <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-eye"></i></div>
+                            <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Computer Vision</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Self-supervised learning, 3D reconstruction, and video understanding with a focus on low-shot scenarios.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                            <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-chat-text"></i></div>
+                            <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">NLP</h3>
+                            <p class="text-slate-600 dark:text-slate-400">LLMs for Indian languages, efficient fine-tuning, and information extraction from scientific literature.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                            <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-brain"></i></div>
+                            <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Reasoning & Planning</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Neuro-symbolic AI, causal reasoning, and long-horizon planning for autonomous agents.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                            <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-magnifying-glass"></i></div>
+                            <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Interpretability</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Mechanistic interpretability, safety guardrails, and detecting hallucinations in deep models.</p>
+                        </div>
+                     </div>
+                </div>
+             </div>
+        </section>
+
+        <section id="publications-view" class="view-section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-24">
+                <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-8">Publications</h2>
+                <div id="publications-list" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <section id="team-view" class="view-section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-24">
+                <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-12 text-center">Full Team</h2>
+                <div id="team-faculty" class="grid md:grid-cols-4 gap-6 mb-12"></div>
+                <div id="team-students" class="grid md:grid-cols-4 gap-6"></div>
+            </div>
+        </section>
+
+        <section id="projects-view" class="view-section hidden">
+            <div class="max-w-7xl mx-auto px-4 py-24">
+                <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-12 text-center">Projects</h2>
+                <div id="projects-list" class="grid md:grid-cols-2 gap-8"></div>
+            </div>
+        </section>
+
+        <section id="contact-view" class="view-section hidden">
+            <div class="max-w-3xl mx-auto px-4 py-24">
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 transition-colors">
+                    <h2 class="text-2xl font-bold mb-6 text-center text-slate-900 dark:text-slate-100">Contact Us</h2>
+                    <form id="contact-form" class="space-y-4">
+                        <input type="text" id="contact-name" placeholder="Name" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required>
+                        <input type="email" id="contact-email" placeholder="Email" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required>
+                        <textarea id="contact-message" rows="4" placeholder="Message" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required></textarea>
+                        <button type="submit" class="w-full py-3 bg-lab-primary dark:bg-emerald-600 text-white font-bold rounded-lg hover:bg-lab-dark dark:hover:bg-emerald-700 transition">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-view" class="view-section hidden">
+             <!-- Simplified Admin Panel -->
+             <div class="max-w-md mx-auto py-24 px-4">
+                <div id="admin-login-panel" class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
+                    <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">Admin Login</h2>
+                    <form id="login-form" class="space-y-4">
+                        <input type="email" id="admin-email" placeholder="Email" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <input type="password" id="admin-password" placeholder="Password" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <button type="submit" class="w-full bg-slate-900 dark:bg-slate-700 text-white p-2 rounded hover:bg-slate-800 dark:hover:bg-slate-600">Login</button>
+                    </form>
+                    <div id="login-error" class="text-red-500 text-sm mt-2 hidden"></div>
+                </div>
+                <div id="admin-dashboard" class="hidden text-slate-900 dark:text-slate-100">
+                    <h2 class="text-xl font-bold mb-4">Dashboard</h2>
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded border dark:border-slate-700 mb-4">
+                        <h3 class="font-bold">Add Publication</h3>
+                        <form id="add-pub-form" class="space-y-2 mt-2">
+                            <input id="new-pub-title" placeholder="Title" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
+                            <input id="new-pub-authors" placeholder="Authors" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
+                            <input id="new-pub-year" type="number" value="2025" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Add</button>
+                        </form>
+                    </div>
+                    <button id="logout-btn" class="text-red-600 text-sm underline">Logout</button>
+                </div>
+             </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 transition-colors relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <div class="text-white font-serif font-bold text-lg mb-4">Tr<sup>2</sup>AIL Group</div>
+                <p>Dept. of CSE, IIT Kharagpur<br>West Bengal, India - 721302</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Links</h4>
+                <ul class="space-y-2">
+                    <li><button onclick="router.navigate('publications')" class="hover:text-white">Publications</button></li>
+                    <li><button onclick="router.navigate('contact')" class="hover:text-white">Contact</button></li>
+                    <li><button onclick="router.navigate('admin')" class="hover:text-white text-xs opacity-50">Admin</button></li>
+                </ul>
+            </div>
+            <div>
+                <p class="mb-4">&copy; 2025 IIT Kharagpur AI Lab.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-white"><i class="ph ph-twitter-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-white"><i class="ph ph-github-logo text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script type="module">
+        const USE_MOCK_DATA = true; 
+        
+        // Mock Data
+        const mockData = {
+            publications: [
+                { title: "Causal Abstractions in Large Language Models", authors: "S. Aditya, S. Gupta, P. Das", venue: "NeurIPS 2024", year: 2024, area: "NLP" },
+                { title: "Efficient Vision Transformers for Medical Imaging", authors: "K. Singh, M. Banerjee", venue: "CVPR 2024", year: 2024, area: "CV" }
+            ],
+            team: [
+                { name: "Prof. Somak Aditya", role: "faculty", interests: "NLP, Neuro-symbolic AI", image: "https://api.placeholder.com/150?text=SA" },
+                { name: "Prof. Priya Das", role: "faculty", interests: "CV, Medical AI", image: "https://api.placeholder.com/150?text=PD" },
+                { name: "Soham Gupta", role: "student", interests: "LLM Interpretability", image: "https://api.placeholder.com/150?text=SG" },
+                { name: "Kavita Singh", role: "student", interests: "Vision Transformers", image: "https://api.placeholder.com/150?text=KS" }
+            ],
+            projects: [
+                { title: "Project Vani", desc: "Open-source speech recognition for 50+ Indian dialects.", tags: ["NLP"], status: "Ongoing" },
+                { title: "MediScan AI", desc: "Automated tumor detection in low-contrast X-rays.", tags: ["CV"], status: "Ongoing" }
+            ],
+            news: [
+                { title: "Best Paper Award at CVPR 2024", date: "June 2024", summary: "Our work on 'Efficient ViTs' received the Best Paper Honorable Mention.", tag: "Award" },
+                { title: "New Grant from SERB", date: "May 2024", summary: "Lab received funding for 'Neuro-symbolic AI' research track.", tag: "Grant" },
+                { title: "Workshop on AI Safety", date: "April 2024", summary: "Hosting the 1st National Workshop on AI Alignment at IIT KGP.", tag: "Event" }
+            ]
+        };
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "YOUR_API_KEY", projectId: "your-project" };
+        let db, auth, isFirebaseActive = false;
+
+        try {
+            if (!USE_MOCK_DATA && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                isFirebaseActive = true;
+            }
+        } catch (e) { console.log("Using Mock Data"); }
+
+        // --- DARK MODE LOGIC ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+            if(!localStorage.getItem('theme')) localStorage.setItem('theme', 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        if(mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // --- HERO SLIDER LOGIC ---
+        const heroImages = [
+            "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop", // AI Network
+            "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=2000&auto=format&fit=crop", // Code
+            "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop", // Robots
+            "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?q=80&w=2000&auto=format&fit=crop"  // Circuits
+        ];
+        
+        let currentSlide = 0;
+        const sliderContainer = document.getElementById('hero-slider');
+
+        function initSlider() {
+            if(!sliderContainer) return;
+            sliderContainer.innerHTML = '';
+            heroImages.forEach((src, idx) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = `slider-image ${idx === 0 ? 'active' : ''}`;
+                img.alt = "Hero Background";
+                sliderContainer.appendChild(img);
+            });
+
+            setInterval(() => {
+                const images = document.querySelectorAll('.slider-image');
+                images[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % images.length;
+                images[currentSlide].classList.add('active');
+            }, 5000); 
+        }
+        initSlider();
+
+        // --- SEARCH LOGIC ---
+        // Elements
+        const searchOverlay = document.getElementById('search-overlay'); // Mobile/Overlay
+        const closeSearch = document.getElementById('close-search');
+        const overlayInput = document.getElementById('search-input');
+        const overlayResults = document.getElementById('search-results');
+        const mobileSearchToggle = document.getElementById('mobile-search-toggle');
+        
+        // Desktop Inline Elements
+        const navbarInput = document.getElementById('navbar-search-input');
+        const navbarResults = document.getElementById('navbar-search-results');
+
+        // Toggle Overlay (Mobile)
+        function toggleOverlaySearch() {
+            const isHidden = searchOverlay.classList.contains('hidden');
+            if (isHidden) {
+                searchOverlay.classList.remove('hidden');
+                searchOverlay.classList.add('flex');
+                setTimeout(() => overlayInput.focus(), 100);
+            } else {
+                searchOverlay.classList.add('hidden');
+                searchOverlay.classList.remove('flex');
+                overlayInput.value = '';
+                overlayResults.innerHTML = '<div class="text-center text-slate-400 mt-12">Start typing to search...</div>';
+            }
+        }
+
+        if(mobileSearchToggle) mobileSearchToggle.addEventListener('click', toggleOverlaySearch);
+        if(closeSearch) closeSearch.addEventListener('click', toggleOverlaySearch);
+
+        // Core Search Function
+        function performSearch(term, resultsContainer) {
+            if (term.length < 2) {
+                resultsContainer.innerHTML = '<div class="text-center text-slate-400 p-4 text-sm">Type at least 2 characters...</div>';
+                return;
+            }
+
+            let results = [];
+            term = term.toLowerCase();
+            
+            // Search Publications
+            mockData.publications.forEach(p => {
+                if (p.title.toLowerCase().includes(term) || p.authors.toLowerCase().includes(term)) {
+                    results.push({ type: 'Publication', title: p.title, subtitle: p.venue, link: 'publications' });
+                }
+            });
+
+            // Search Team
+            mockData.team.forEach(t => {
+                if (t.name.toLowerCase().includes(term) || t.interests.toLowerCase().includes(term)) {
+                    results.push({ type: 'Team', title: t.name, subtitle: t.role, link: 'team' });
+                }
+            });
+
+            // Search Projects
+            mockData.projects.forEach(p => {
+                if (p.title.toLowerCase().includes(term) || p.desc.toLowerCase().includes(term)) {
+                    results.push({ type: 'Project', title: p.title, subtitle: 'Ongoing Project', link: 'projects' });
+                }
+            });
+
+             // Search News
+             mockData.news.forEach(n => {
+                if (n.title.toLowerCase().includes(term) || n.summary.toLowerCase().includes(term)) {
+                    results.push({ type: 'News', title: n.title, subtitle: n.date, link: 'home' });
+                }
+            });
+
+            // Render
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="text-center text-slate-500 p-4 text-sm">No results found.</div>';
+            } else {
+                resultsContainer.innerHTML = results.map(r => `
+                    <div onclick="router.navigate('${r.link}'); ${resultsContainer.id === 'navbar-search-results' ? 'clearNavbarSearch()' : 'toggleOverlaySearch()'}" class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition mb-2 last:mb-0">
+                        <div class="flex justify-between items-start gap-2">
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-slate-900 dark:text-slate-100 text-sm truncate">${r.title}</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${r.subtitle}</p>
+                            </div>
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 bg-lab-primary/10 text-lab-primary dark:text-emerald-400 rounded uppercase whitespace-nowrap">${r.type}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Overlay Input Listener
+        overlayInput.addEventListener('input', (e) => performSearch(e.target.value, overlayResults));
+
+        // Navbar Input Listeners
+        if(navbarInput) {
+            navbarInput.addEventListener('focus', () => {
+                navbarResults.classList.remove('hidden');
+                navbarResults.classList.add('flex');
+            });
+            
+            navbarInput.addEventListener('input', (e) => {
+                performSearch(e.target.value, navbarResults);
+            });
+
+            // Close on click outside
+            document.addEventListener('click', (e) => {
+                if (!navbarInput.contains(e.target) && !navbarResults.contains(e.target)) {
+                    clearNavbarSearch();
+                }
+            });
+        }
+
+        function clearNavbarSearch() {
+            if(navbarResults) {
+                navbarResults.classList.add('hidden');
+                navbarResults.classList.remove('flex');
+            }
+            if(navbarInput) navbarInput.value = '';
+        }
+
+
+        // --- ROUTER ---
+        const views = ['home', 'research', 'publications', 'team', 'projects', 'contact', 'admin'];
+        window.router = {
+            navigate: (viewName) => {
+                views.forEach(v => document.getElementById(`${v}-view`)?.classList.add('hidden'));
+                const target = document.getElementById(`${viewName}-view`);
+                if(target) {
+                    target.classList.remove('hidden');
+                    target.classList.add('animate-fade-in');
+                    window.scrollTo(0,0);
+                }
+                if(viewName === 'home') loadHomeNews();
+                if(viewName === 'publications') loadPublications();
+                if(viewName === 'team') loadTeam();
+                if(viewName === 'projects') loadProjects();
+                
+                document.getElementById('mobile-menu').classList.add('hidden');
+            }
+        };
+
+        window.onload = () => loadHomeNews();
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Data Loading Functions
+        async function loadHomeNews() {
+            const listEl = document.getElementById('home-news-grid');
+            if(listEl.children.length > 1) return; 
+            let data = mockData.news;
+            if (isFirebaseActive) {
+                try {
+                    const q = query(collection(db, "news"), orderBy("date", "desc"), limit(3));
+                    const snap = await getDocs(q);
+                    if(!snap.empty) data = snap.docs.map(doc => doc.data());
+                } catch(e) {}
+            }
+            listEl.innerHTML = '';
+            data.forEach(n => {
+                const card = document.createElement('div');
+                card.className = "bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-lg transition group";
+                card.innerHTML = `
+                    <span class="text-[10px] font-bold bg-lab-light dark:bg-emerald-900/30 text-lab-primary dark:text-emerald-400 px-2 py-1 rounded uppercase tracking-wider mb-3 inline-block border border-lab-primary/10 dark:border-emerald-500/20">${n.tag || 'News'}</span>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-lab-primary dark:group-hover:text-emerald-400 transition">${n.title}</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">${n.summary}</p>
+                    <div class="text-xs text-slate-400 font-medium border-t border-slate-50 dark:border-slate-700 pt-3">${n.date}</div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        async function loadPublications() {
+            const listEl = document.getElementById('publications-list');
+            listEl.innerHTML = '';
+            mockData.publications.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm";
+                card.innerHTML = `<h4 class="font-bold text-slate-900 dark:text-slate-100">${p.title}</h4><p class="text-sm text-slate-600 dark:text-slate-400">${p.authors} (${p.year}) - ${p.venue}</p>`;
+                listEl.appendChild(card);
+            });
+        }
+
+        async function loadTeam() {
+            const fEl = document.getElementById('team-faculty');
+            const sEl = document.getElementById('team-students');
+            if(fEl.innerHTML) return;
+            mockData.team.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "text-center p-4 bg-white dark:bg-slate-800 rounded shadow-sm border border-slate-100 dark:border-slate-700";
+                card.innerHTML = `<h4 class="font-bold text-slate-900 dark:text-slate-100">${m.name}</h4><p class="text-xs text-slate-500 dark:text-slate-400">${m.interests}</p>`;
+                if(m.role === 'faculty') fEl.appendChild(card); else sEl.appendChild(card);
+            });
+        }
+
+        async function loadProjects() {
+            const listEl = document.getElementById('projects-list');
+            if(listEl.innerHTML) return;
+            mockData.projects.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 p-6 rounded shadow-sm border border-slate-100 dark:border-slate-700";
+                card.innerHTML = `<h3 class="font-bold text-slate-900 dark:text-slate-100">${p.title}</h3><p class="text-sm text-slate-600 dark:text-slate-400 mt-2">${p.desc}</p>`;
+                listEl.appendChild(card);
+            });
+        }
+
+        // Admin Logic
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emai = document.getElementById('admin-email').value;
+            const pass = document.getElementById('admin-password').value;
+            if(emai === 'admin@kgp.ac.in' && pass === 'admin') {
+                document.getElementById('admin-login-panel').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+            } else {
+                alert("Use admin@kgp.ac.in / admin");
+            }
+        });
+        document.getElementById('logout-btn').addEventListener('click', () => {
+             document.getElementById('admin-login-panel').classList.remove('hidden');
+             document.getElementById('admin-dashboard').classList.add('hidden');
+        });
+        
+    </script>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

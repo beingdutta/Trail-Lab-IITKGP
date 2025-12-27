@@ -1,0 +1,90 @@
+/* Custom Utilities */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+/* Dark mode glass nav override */
+html.dark .glass-nav {
+    background: rgba(15, 23, 42, 0.9); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+html.dark .text-gradient {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-header {
+    position: relative;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+.section-header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #047857;
+    margin: 1rem auto 0;
+    border-radius: 2px;
+    opacity: 0.8;
+}
+html.dark .section-header::after {
+    background: #10b981; /* Emerald 500 in dark mode */
+}
+
+/* Slider Styles */
+.slider-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    z-index: 0;
+}
+.slider-image.active {
+    opacity: 0.15; /* Subtle background fade */
+}
+html.dark .slider-image.active {
+    opacity: 0.1; /* Even subtler in dark mode */
+}
+
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
+/* Hide scrollbar for cleaner look */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Custom Scrollbar for Search Results */
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent; 
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 20px;
+}
