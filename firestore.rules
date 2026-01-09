@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is logged in (Admin)
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // 1. Contact Messages: 
+    // Allow ANYONE to create (send) a message.
+    // Only Admins can read, update, or delete them.
+    match /messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // 2. Public Content (News, Team, etc.):
+    // Everyone can read. Only Admins can write.
+    match /{collection}/{document=**} {
+      allow read: if collection != 'messages'; 
+      allow write: if isAdmin();
+    }
+  }
+}

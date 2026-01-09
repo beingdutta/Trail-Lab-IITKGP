@@ -58,7 +58,7 @@
                     <button onclick="router.navigate('publications')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Publications</button>
                     <button onclick="router.navigate('team')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Team</button>
                     <button onclick="router.navigate('projects')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Projects</button>
-                    <button onclick="router.navigate('works')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Works</button>
+                    <button onclick="router.navigate('courses')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Courses</button>
                     <button onclick="router.navigate('grants')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Grants</button>
                     <button onclick="router.navigate('news')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">News</button>
                     
@@ -68,7 +68,7 @@
                         <i class="ph ph-sun text-xl hidden dark:block text-yellow-400"></i>
                     </button>
 
-                    <button onclick="router.navigate('contact')" class="px-6 py-2 bg-lab-primary dark:bg-emerald-600 text-white rounded-full hover:bg-lab-dark dark:hover:bg-emerald-700 transition font-medium text-sm shadow-md transform hover:-translate-y-0.5">Join Us</button>
+                    <a href="contact.html" class="px-6 py-2 bg-lab-primary dark:bg-emerald-600 text-white rounded-full hover:bg-lab-dark dark:hover:bg-emerald-700 transition font-medium text-sm shadow-md transform hover:-translate-y-0.5">Join Us</a>
                 </div>
 
                 <!-- Mobile Button -->
@@ -94,10 +94,10 @@
             <button onclick="router.navigate('publications')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Publications</button>
             <button onclick="router.navigate('team')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Team</button>
             <button onclick="router.navigate('projects')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Projects</button>
-            <button onclick="router.navigate('works')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Works</button>
+            <button onclick="router.navigate('courses')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Courses</button>
             <button onclick="router.navigate('grants')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">Grants</button>
             <button onclick="router.navigate('news')" class="block w-full text-left py-3 text-slate-600 dark:text-slate-300 border-b border-slate-50 dark:border-slate-800 hover:text-lab-primary dark:hover:text-emerald-400">News</button>
-            <button onclick="router.navigate('contact')" class="block w-full text-left py-3 text-lab-primary dark:text-emerald-400 font-bold">Join Us</button>
+            <a href="contact.html" class="block w-full text-left py-3 text-lab-primary dark:text-emerald-400 font-bold">Join Us</a>
         </div>
     </nav>
 
@@ -209,25 +209,6 @@
                             View all Grants <i class="ph ph-arrow-right ml-2"></i>
                         </button>
                     </div>
-                </div>
-            </div>
-
-            <!-- 5. Recent Works (Dark Section) -->
-            <div class="py-24 bg-slate-900 dark:bg-black text-white relative overflow-hidden transition-colors">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-lab-primary rounded-full blur-3xl opacity-10 -mr-20 -mt-20"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-lab-accent rounded-full blur-3xl opacity-5 -ml-16 -mb-16"></div>
-                
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                        <div>
-                            <h2 class="text-3xl font-serif font-bold text-white">Recent Works</h2>
-                            <p class="text-slate-400 mt-2">Code, Datasets, and Benchmarks.</p>
-                        </div>
-                        <button onclick="router.navigate('works')" class="text-lab-accent hover:text-white transition mt-4 md:mt-0 flex items-center font-medium">View All <i class="ph ph-arrow-right ml-2"></i></button>
-                    </div>
-                    
-                    <!-- Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop -->
-                    <div id="home-works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
             </div>
 
@@ -373,24 +354,10 @@
             </div>
         </section>
 
-        <section id="works-view" class="view-section hidden">
+        <section id="courses-view" class="view-section hidden">
             <div class="max-w-7xl mx-auto px-4 py-24">
-                <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-8">Recent Works</h2>
-                <div id="works-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </div>
-        </section>
-
-        <section id="contact-view" class="view-section hidden">
-            <div class="max-w-3xl mx-auto px-4 py-24">
-                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 transition-colors">
-                    <h2 class="text-2xl font-bold mb-6 text-center text-slate-900 dark:text-slate-100">Contact Us</h2>
-                    <form id="contact-form" class="space-y-4">
-                        <input type="text" id="contact-name" placeholder="Name" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required>
-                        <input type="email" id="contact-email" placeholder="Email" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required>
-                        <textarea id="contact-message" rows="4" placeholder="Message" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 dark:text-slate-200 rounded-lg border-transparent focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-lab-primary dark:focus:ring-emerald-500 transition" required></textarea>
-                        <button type="submit" class="w-full py-3 bg-lab-primary dark:bg-emerald-600 text-white font-bold rounded-lg hover:bg-lab-dark dark:hover:bg-emerald-700 transition">Send Message</button>
-                    </form>
-                </div>
+                <h2 class="text-3xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-8">Courses</h2>
+                <div id="courses-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </div>
         </section>
 
@@ -407,7 +374,7 @@
                 <h4 class="text-white font-bold mb-4">Links</h4>
                 <ul class="space-y-2">
                     <li><button onclick="router.navigate('publications')" class="hover:text-white">Publications</button></li>
-                    <li><button onclick="router.navigate('contact')" class="hover:text-white">Contact</button></li>
+                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
                     <li><a href="admin.html" class="hover:text-white text-xs opacity-50">Admin</a></li>
                 </ul>
             </div>

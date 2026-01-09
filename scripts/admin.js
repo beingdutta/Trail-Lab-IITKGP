@@ -1,7 +1,7 @@
 import { firebaseConfig } from './firebase-config.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 let db, auth;
 
@@ -49,16 +49,23 @@ const schemas = {
         { key: 'summary', label: 'Summary', type: 'textarea' },
         { key: 'icon', label: 'Icon Class (e.g., ph-currency-inr)', type: 'text' }
     ],
-    works: [
-        { key: 'title', label: 'Title', type: 'text' },
-        { key: 'year', label: 'Year', type: 'text' },
+    courses: [
+        { key: 'title', label: 'Course Title', type: 'text' },
+        { key: 'code', label: 'Course Code', type: 'text' },
+        { key: 'semester', label: 'Semester', type: 'select', options: ['Spring', 'Autumn'] },
+        { key: 'year', label: 'Year', type: 'number' },
         { key: 'description', label: 'Description', type: 'textarea' },
-        { key: 'link', label: 'Link URL', type: 'text' },
-        { key: 'type', label: 'Type (Code/Data)', type: 'text' }
+        { key: 'link', label: 'Course Link', type: 'text' }
     ],
     faqs: [
         { key: 'question', label: 'Question', type: 'text' },
         { key: 'answer', label: 'Answer (HTML allowed)', type: 'textarea' }
+    ],
+    messages: [
+        { key: 'name', label: 'Name', type: 'text' },
+        { key: 'email', label: 'Email', type: 'text' },
+        { key: 'message', label: 'Message', type: 'textarea' },
+        { key: 'date', label: 'Date', type: 'text' }
     ]
 };
 
@@ -77,6 +84,7 @@ if(auth) {
             loginPanel.classList.add('hidden');
             dashboard.classList.remove('hidden');
             renderTab(currentTab);
+            checkUnreadMessages();
         } else {
             loginPanel.classList.remove('hidden');
             dashboard.classList.add('hidden');
@@ -124,6 +132,20 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
+async function checkUnreadMessages() {
+    if (!db) return;
+    try {
+        const q = query(collection(db, "messages"), where("read", "==", false));
+        const snap = await getDocs(q);
+        const badge = document.getElementById('message-badge');
+        if (badge) {
+            badge.innerText = snap.size;
+            if (snap.size > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+        }
+    } catch (e) { console.error("Error checking messages", e); }
+}
+
 // --- CRUD LOGIC ---
 async function renderTab(collectionName) {
     editingId = null;
@@ -134,8 +156,13 @@ async function renderTab(collectionName) {
     let items = [];
     
     try {
-        const snap = await getDocs(collection(db, collectionName));
+        let q = collection(db, collectionName);
+        // Sort messages by date if possible, or just fetch all
+        const snap = await getDocs(q);
         items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        // Client-side sort for messages to show newest first
+        if(collectionName === 'messages') items.sort((a,b) => new Date(b.date) - new Date(a.date));
     } catch (e) {
         console.error("Fetch error:", e);
     }
@@ -147,7 +174,7 @@ async function renderTab(collectionName) {
         <div class="mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold capitalize">Manage ${collectionName}</h3>
-                <button id="cancel-edit-btn" class="hidden text-sm text-red-500 hover:underline">Cancel Edit</button>
+                <button id="cancel-edit-btn" class="hidden text-sm text-red-500 hover:underline">Cancel</button>
             </div>
             <form id="crud-form" class="grid gap-4 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
                 ${schema.map(field => `
@@ -165,18 +192,27 @@ async function renderTab(collectionName) {
             </form>
         </div>
         <div class="space-y-2">
-            ${items.map(item => `
-                <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">
+            ${items.map(item => {
+                const isMessage = collectionName === 'messages';
+                const isUnread = isMessage && !item.read;
+                
+                return `
+                <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-900 rounded border ${isUnread ? 'border-l-4 border-l-lab-primary border-y-slate-200 border-r-slate-200' : 'border-slate-200'} dark:border-slate-700">
                     <div class="truncate pr-4">
-                        <span class="font-bold dark:text-white">${item[schema[0].key]}</span>
+                        <span class="${isUnread ? 'font-black text-slate-900' : 'font-medium'} dark:text-white">${item[schema[0].key]}</span>
                         <span class="text-xs text-slate-500 ml-2">${item[schema[1]?.key] || ''}</span>
+                        ${isMessage ? `<span class="text-xs text-slate-400 ml-2">${item.date ? new Date(item.date).toLocaleDateString() : ''}</span>` : ''}
+                        ${isMessage ? `<div class="text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">${item.message}</div>` : ''}
                     </div>
                     <div class="flex gap-2 shrink-0">
-                        <button onclick="window.editItem('${collectionName}', '${item.id}')" class="text-blue-500 hover:text-blue-700 p-1"><i class="ph ph-pencil-simple text-lg"></i></button>
+                        ${isMessage ? `
+                            <button onclick="window.toggleMessageRead('${item.id}', ${!item.read})" class="p-1 ${item.read ? 'text-slate-400' : 'text-green-600'}" title="${item.read ? 'Mark Unread' : 'Mark Read'}"><i class="ph ${item.read ? 'ph-envelope-open' : 'ph-envelope-simple'} text-lg"></i></button>
+                        ` : ''}
+                        <button onclick="window.editItem('${collectionName}', '${item.id}')" class="text-blue-500 hover:text-blue-700 p-1" title="${isMessage ? 'View Details' : 'Edit'}"><i class="ph ${isMessage ? 'ph-eye' : 'ph-pencil-simple'} text-lg"></i></button>
                         <button onclick="window.deleteItem('${collectionName}', '${item.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="ph ph-trash text-lg"></i></button>
                     </div>
                 </div>
-            `).join('')}
+            `}).join('')}
             ${items.length === 0 ? '<div class="text-slate-500 text-center">No items found.</div>' : ''}
         </div>
     `;
@@ -240,15 +276,31 @@ window.editItem = (collectionName, id) => {
     form.scrollIntoView({ behavior: 'smooth' });
 };
 
+window.toggleMessageRead = async (id, newStatus) => {
+    try {
+        await updateDoc(doc(db, 'messages', id), { read: newStatus });
+        showToast(`Message marked as ${newStatus ? 'read' : 'unread'}`);
+        renderTab('messages');
+        checkUnreadMessages();
+    } catch (e) {
+        showToast("Error: " + e.message, 'error');
+    }
+};
+
 // Global delete function
 window.deleteItem = async (collectionName, id) => {
-    if(confirm("Are you sure you want to delete this item?")) {
-        try {
-            await deleteDoc(doc(db, collectionName, id));
-            showToast("Item deleted successfully!");
-            renderTab(collectionName);
-        } catch (err) {
-            showToast("Error deleting: " + err.message, 'error');
-        }
+    const password = prompt("Please enter admin password to confirm deletion:");
+    if (!password) return;
+
+    try {
+        const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+        await reauthenticateWithCredential(auth.currentUser, credential);
+        
+        await deleteDoc(doc(db, collectionName, id));
+        showToast("Item deleted successfully!");
+        renderTab(collectionName);
+        if(collectionName === 'messages') checkUnreadMessages();
+    } catch (err) {
+        showToast("Authentication failed: " + err.message, 'error');
     }
 };

@@ -29,12 +29,9 @@ const mockData = {
         { title: "Learning from Rules and Data for Image Analytics", agency: "SERB DST SRG", amount: "~ INR 26 Lakhs", duration: "2023", icon: "ph-bank" },
         { title: "Infusing Language Model with Affordances", agency: "Toloka AI", amount: "~ $300", duration: "2023", icon: "ph-robot" }
     ],
-    works: [
-        { title: "NLKI Framework", year: 2025, description: "Lightweight Natural Language Knowledge Integration for Improving Small VLMs in Commonsense VQA.", type: "Code & Models" },
-        { title: "MathSensei", year: 2024, description: "A Tool-Augmented LLM for Mathematical Reasoning.", type: "Code & Data" },
-        { title: "LogiGLUE & LogiT5", year: 2023, description: "Broad-coverage benchmark for Logical Reasoning and specialized LLM.", type: "Benchmark" },
-        { title: "TaxiXNLI Dataset", year: 2022, description: "Semi-automated type-annotated Multilingual dataset for NLI.", type: "Dataset" },
-        { title: "TaxiNLI & LoNLI", year: 2020, description: "Crowdsourced and synthetic reasoning type-annotated data for NLI.", type: "Dataset" }
+    courses: [
+        { title: "Deep Learning", code: "CS60010", semester: "Spring 2025", description: "Introduction to Deep Learning architectures and applications.", link: "#" },
+        { title: "Artificial Intelligence", code: "CS60001", semester: "Autumn 2024", description: "Foundations of AI search, logic, and learning.", link: "#" }
     ]
 };
 
@@ -110,7 +107,7 @@ function initSlider() {
 initSlider();
 
 // --- ROUTER ---
-const views = ['home', 'research', 'publications', 'team', 'projects', 'contact', 'news', 'grants', 'works'];
+const views = ['home', 'research', 'publications', 'team', 'projects', 'news', 'grants', 'courses'];
 window.router = {
     navigate: (viewName) => {
         views.forEach(v => document.getElementById(`${v}-view`)?.classList.add('hidden'));
@@ -126,7 +123,7 @@ window.router = {
         if(viewName === 'projects') loadProjects();
         if(viewName === 'news') loadNews();
         if(viewName === 'grants') loadGrants(false);
-        if(viewName === 'works') loadWorks(false);
+        if(viewName === 'courses') loadCourses();
         
         document.getElementById('mobile-menu').classList.add('hidden');
     }
@@ -136,7 +133,6 @@ window.onload = () => {
     loadHomeNews();
     loadTeam(true);
     loadGrants(true);
-    loadWorks(true);
 };
 document.getElementById('mobile-menu-btn').addEventListener('click', () => {
     document.getElementById('mobile-menu').classList.toggle('hidden');
@@ -299,32 +295,29 @@ async function loadGrants(isHome = false) {
     });
 }
 
-async function loadWorks(isHome = false) {
-    const containerId = isHome ? 'home-works-grid' : 'works-list';
-    const listEl = document.getElementById(containerId);
+async function loadCourses() {
+    const listEl = document.getElementById('courses-list');
     if(!listEl || listEl.innerHTML) return;
 
-    let data = mockData.works;
+    let data = mockData.courses;
     if (isFirebaseActive) {
         try {
-            const snap = await getDocs(collection(db, "works"));
+            const snap = await getDocs(collection(db, "courses"));
             if(!snap.empty) data = snap.docs.map(doc => doc.data());
         } catch(e) {}
     }
 
-    const displayData = isHome ? data.slice(0, 3) : data;
-
-    displayData.forEach(w => {
+    data.forEach(c => {
         const card = document.createElement('div');
-        card.className = "bg-slate-800/50 backdrop-blur p-6 rounded-xl border border-slate-700 hover:bg-slate-800 transition group flex flex-col";
+        card.className = "bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition";
         card.innerHTML = `
-            <div class="flex justify-between items-start mb-4">
-                <span class="bg-lab-primary/20 text-lab-primary px-2 py-1 rounded text-[10px] font-bold border border-lab-primary/20">${w.year}</span>
-                <i class="ph ph-code text-xl text-slate-500 group-hover:text-white transition"></i>
+            <div class="flex justify-between items-start mb-2">
+                <span class="bg-lab-primary/10 text-lab-primary dark:text-emerald-400 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">${c.code}</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">${c.semester} ${c.year || ''}</span>
             </div>
-            <h3 class="text-lg font-bold mb-2 text-white">${w.title}</h3>
-            <p class="text-slate-400 text-sm mb-4 flex-grow leading-relaxed">${w.description}</p>
-            <span class="text-xs text-lab-accent hover:text-white flex items-center gap-1 font-semibold mt-auto">${w.type}</span>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">${c.title}</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">${c.description}</p>
+            ${c.link ? `<a href="${c.link}" target="_blank" class="text-lab-primary dark:text-emerald-400 text-sm font-medium hover:underline">View Course Page &rarr;</a>` : ''}
         `;
         listEl.appendChild(card);
     });
