@@ -1,4 +1,4 @@
-const USE_MOCK_DATA = true; 
+import { firebaseConfig, USE_MOCK_DATA } from './firebase-config.js';
 
 // Mock Data
 const mockData = {
@@ -24,14 +24,13 @@ const mockData = {
 };
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-const firebaseConfig = { apiKey: "YOUR_API_KEY", projectId: "your-project" };
 let db, auth, isFirebaseActive = false;
 
 try {
-    if (!USE_MOCK_DATA && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    if (!USE_MOCK_DATA && firebaseConfig.apiKey && firebaseConfig.apiKey !== "AIzaSy...") {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         auth = getAuth(app);
@@ -296,20 +295,3 @@ async function loadProjects() {
         listEl.appendChild(card);
     });
 }
-
-// Admin Logic
-document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const emai = document.getElementById('admin-email').value;
-    const pass = document.getElementById('admin-password').value;
-    if(emai === 'admin@kgp.ac.in' && pass === 'admin') {
-        document.getElementById('admin-login-panel').classList.add('hidden');
-        document.getElementById('admin-dashboard').classList.remove('hidden');
-    } else {
-        alert("Use admin@kgp.ac.in / admin");
-    }
-});
-document.getElementById('logout-btn').addEventListener('click', () => {
-        document.getElementById('admin-login-panel').classList.remove('hidden');
-        document.getElementById('admin-dashboard').classList.add('hidden');
-});

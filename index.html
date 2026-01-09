@@ -15,137 +15,9 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Tailwind Config for Custom Colors/Fonts -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // Enable class-based dark mode
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
-                    },
-                    colors: {
-                        lab: {
-                            primary: '#047857', // Emerald 700
-                            dark: '#064e3b',    // Emerald 900
-                            accent: '#d97706',  // Amber 600
-                            slate: '#0f172a',   // Slate 900
-                            light: '#f0fdf4',   // Emerald 50
-                            surface: '#ffffff'
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out forwards',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="scripts/tailwind-config.js"></script>
 
-    <style>
-        /* Custom Utilities */
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        /* Dark mode glass nav override */
-        html.dark .glass-nav {
-            background: rgba(15, 23, 42, 0.9); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .text-gradient {
-            background: linear-gradient(135deg, #047857 0%, #064e3b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        html.dark .text-gradient {
-            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-header {
-            position: relative;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-        .section-header::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: #047857;
-            margin: 1rem auto 0;
-            border-radius: 2px;
-            opacity: 0.8;
-        }
-        html.dark .section-header::after {
-            background: #10b981; /* Emerald 500 in dark mode */
-        }
-
-        /* Slider Styles */
-        .slider-image {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            z-index: 0;
-        }
-        .slider-image.active {
-            opacity: 0.15; /* Subtle background fade */
-        }
-        html.dark .slider-image.active {
-            opacity: 0.1; /* Even subtler in dark mode */
-        }
-
-        details > summary {
-            list-style: none;
-        }
-        details > summary::-webkit-details-marker {
-            display: none;
-        }
-        sup {
-            vertical-align: super;
-            font-size: smaller;
-        }
-        /* Hide scrollbar for cleaner look */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        /* Custom Scrollbar for Search Results */
-        .custom-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent; 
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background-color: rgba(156, 163, 175, 0.5);
-            border-radius: 20px;
-        }
-    </style>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styles/index.css">
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 font-sans antialiased flex flex-col min-h-screen transition-colors duration-300 relative">
 
@@ -270,14 +142,6 @@
             
             <!-- Hero with Background Slider -->
             <div class="relative pt-32 pb-12 md:pt-40 md:pb-16 overflow-hidden transition-colors duration-300">
-                
-                <!-- Image Slider -->
-                <div id="hero-slider" class="absolute inset-0 z-0">
-                    <!-- Images will be injected by JS -->
-                </div>
-                
-                <!-- Gradient Overlay -->
-                <div class="absolute inset-0 z-0 bg-gradient-to-b from-white/95 via-white/80 to-transparent dark:from-slate-950/95 dark:via-slate-950/80 dark:to-transparent"></div>
 
                 <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
                     <div class="inline-block animate-float">
@@ -702,9 +566,8 @@
         </section>
 
         <section id="admin-view" class="view-section hidden">
-             <!-- Simplified Admin Panel -->
-             <div class="max-w-md mx-auto py-24 px-4">
-                <div id="admin-login-panel" class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
+             <div class="max-w-4xl mx-auto py-24 px-4">
+                <div id="admin-login-panel" class="max-w-md mx-auto bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors">
                     <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">Admin Login</h2>
                     <form id="login-form" class="space-y-4">
                         <input type="email" id="admin-email" placeholder="Email" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white">
@@ -713,18 +576,25 @@
                     </form>
                     <div id="login-error" class="text-red-500 text-sm mt-2 hidden"></div>
                 </div>
+                
                 <div id="admin-dashboard" class="hidden text-slate-900 dark:text-slate-100">
-                    <h2 class="text-xl font-bold mb-4">Dashboard</h2>
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded border dark:border-slate-700 mb-4">
-                        <h3 class="font-bold">Add Publication</h3>
-                        <form id="add-pub-form" class="space-y-2 mt-2">
-                            <input id="new-pub-title" placeholder="Title" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
-                            <input id="new-pub-authors" placeholder="Authors" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
-                            <input id="new-pub-year" type="number" value="2025" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" required>
-                            <button class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Add</button>
-                        </form>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Admin Dashboard</h2>
+                        <button id="logout-btn" class="text-red-600 hover:text-red-800 font-medium">Logout</button>
                     </div>
-                    <button id="logout-btn" class="text-red-600 text-sm underline">Logout</button>
+                    
+                    <!-- Tabs -->
+                    <div class="flex space-x-2 mb-6 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-700">
+                        <button class="admin-tab px-4 py-2 rounded-lg bg-lab-primary text-white transition capitalize" data-tab="team">Team</button>
+                        <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="news">News</button>
+                        <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="grants">Grants</button>
+                        <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="works">Works</button>
+                        <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="faqs">FAQs</button>
+                    </div>
+
+                    <div id="admin-content" class="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-200 dark:border-slate-700">
+                        <!-- Content injected by admin.js -->
+                    </div>
                 </div>
              </div>
         </section>
@@ -1075,6 +945,6 @@
         });
         
     </script>
-    <script type="module" src="index.js"></script>
+    <script type="module" src="/scripts/index.js"></script>
 </body>
 </html>
