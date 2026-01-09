@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Areas | Tr²AIL Lab</title>
+    
+    <link rel="icon" href="assets/site-icon.png" type="image/png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Config -->
+    <script src="scripts/tailwind-config.js"></script>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 font-sans antialiased flex flex-col min-h-screen transition-colors duration-300">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-nav shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex flex-col cursor-pointer group" onclick="window.location.href='index.html'">
+                    <span class="font-serif font-bold text-2xl text-slate-900 dark:text-slate-100 tracking-tight group-hover:text-lab-primary dark:group-hover:text-emerald-400 transition-colors">Tr<sup>2</sup>AIL Group</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 font-semibold">IIT Kharagpur</span>
+                </div>
+
+                <div class="hidden lg:flex space-x-6 items-center">
+                    <a href="index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Home</a>
+                    <a href="research.html" class="text-sm font-medium text-lab-primary dark:text-emerald-400 transition uppercase tracking-wide font-bold">Research</a>
+                    <a href="publications.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Publications</a>
+                    <a href="index.html#team-view" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Team</a>
+                    <a href="index.html#projects-view" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Projects</a>
+                    <a href="contact.html" class="px-6 py-2 bg-lab-primary dark:bg-emerald-600 text-white rounded-full hover:bg-lab-dark dark:hover:bg-emerald-700 transition font-medium text-sm shadow-md transform hover:-translate-y-0.5">Join Us</a>
+                </div>
+
+                <div class="lg:hidden flex items-center space-x-4">
+                     <button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none">
+                        <i class="ph ph-moon text-xl dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block text-yellow-400"></i>
+                    </button>
+                    <a href="index.html" class="text-slate-600 dark:text-slate-300 hover:text-lab-primary p-2">
+                        <i class="ph ph-house text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-32 pb-12">
+        <div class="bg-slate-50 dark:bg-slate-950 py-12 transition-colors">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h2 class="text-4xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-12">Research Areas</h2>
+                 <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                        <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-eye"></i></div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Computer Vision</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Self-supervised learning, 3D reconstruction, and video understanding with a focus on low-shot scenarios.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                        <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-chat-text"></i></div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">NLP</h3>
+                        <p class="text-slate-600 dark:text-slate-400">LLMs for Indian languages, efficient fine-tuning, and information extraction from scientific literature.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                        <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-brain"></i></div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Reasoning & Planning</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Neuro-symbolic AI, causal reasoning, and long-horizon planning for autonomous agents.</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 transition-colors">
+                        <div class="text-lab-primary dark:text-emerald-400 text-3xl mb-4"><i class="ph ph-magnifying-glass"></i></div>
+                        <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">Interpretability</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Mechanistic interpretability, safety guardrails, and detecting hallucinations in deep models.</p>
+                    </div>
+                 </div>
+            </div>
+         </div>
+    </main>
+
+    <!-- Developer Credit -->
+    <div class="bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-4 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+                Designed & Developed by <a href="https://www.linkedin.com/in/aritra-dutta-bb988a190/" target="_blank" class="text-lab-primary dark:text-emerald-400 hover:underline font-bold">Aritra Dutta</a> <span class="text-xs opacity-75">(A Member of Tr²AIL Lab)</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 transition-colors relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8 text-sm">
+            <div>
+                <div class="text-white font-serif font-bold text-lg mb-4">Tr<sup>2</sup>AIL Group</div>
+                <p>Dept. of CSE, IIT Kharagpur<br>West Bengal, India - 721302</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="index.html" class="hover:text-white">Home</a></li>
+                    <li><a href="publications.html" class="hover:text-white">Publications</a></li>
+                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+                    <li><a href="admin.html" class="hover:text-white text-xs opacity-50">Admin</a></li>
+                </ul>
+            </div>
+            <div>
+                <p class="mb-4">&copy; 2025 IIT Kharagpur AI Lab.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-white"><i class="ph ph-twitter-logo text-xl"></i></a>
+                    <a href="#" class="hover:text-white"><i class="ph ph-github-logo text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dark Mode Script -->
+    <script>
+        // Simple theme toggle logic for static pages
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'dark') html.classList.add('dark');
+        document.getElementById('mobile-theme-toggle')?.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+    </script>
+</body>
+</html>

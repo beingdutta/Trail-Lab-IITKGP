@@ -107,7 +107,7 @@ function initSlider() {
 initSlider();
 
 // --- ROUTER ---
-const views = ['home', 'research', 'publications', 'team', 'projects', 'news', 'grants', 'courses'];
+const views = ['home', 'team', 'projects', 'news', 'grants', 'courses'];
 window.router = {
     navigate: (viewName) => {
         views.forEach(v => document.getElementById(`${v}-view`)?.classList.add('hidden'));
@@ -118,7 +118,6 @@ window.router = {
             window.scrollTo(0,0);
         }
         if(viewName === 'home') loadHomeNews();
-        if(viewName === 'publications') loadPublications();
         if(viewName === 'team') loadTeam(false);
         if(viewName === 'projects') loadProjects();
         if(viewName === 'news') loadNews();
@@ -133,6 +132,7 @@ window.onload = () => {
     loadHomeNews();
     loadTeam(true);
     loadGrants(true);
+    loadPublications(true);
 };
 document.getElementById('mobile-menu-btn').addEventListener('click', () => {
     document.getElementById('mobile-menu').classList.toggle('hidden');
@@ -184,8 +184,12 @@ async function loadNews() {
     });
 }
 
-async function loadPublications() {
-    const listEl = document.getElementById('publications-list');
+async function loadPublications(isHome = false) {
+    const containerId = isHome ? 'home-publications-list' : 'publications-list';
+    const listEl = document.getElementById(containerId);
+    if(!listEl) return;
+    if(listEl.children.length > 0) return;
+
     listEl.innerHTML = '';
     let data = mockData.publications;
 
@@ -197,7 +201,9 @@ async function loadPublications() {
         } catch(e) { console.error("Pubs fetch error", e); }
     }
 
-    data.forEach(p => {
+    const displayData = isHome ? data.slice(0, 3) : data;
+
+    displayData.forEach(p => {
         const card = document.createElement('div');
         card.className = "bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm";
         card.innerHTML = `<h4 class="font-bold text-slate-900 dark:text-slate-100">${p.title}</h4><p class="text-sm text-slate-600 dark:text-slate-400">${p.authors} (${p.year}) - ${p.venue}</p>`;
