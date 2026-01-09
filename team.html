@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publications | Tr²AIL Lab</title>
+    <title>Team | Tr²AIL Lab</title>
     
     <link rel="icon" href="assets/site-icon.png" type="image/png">
     <!-- Tailwind CSS -->
@@ -33,13 +33,12 @@
                 <div class="hidden lg:flex space-x-6 items-center">
                     <a href="index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Home</a>
                     <a href="research.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Research</a>
-                    <a href="publications.html" class="text-sm font-medium text-lab-primary dark:text-emerald-400 transition uppercase tracking-wide font-bold">Publications</a>
-                    <a href="team.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Team</a>
+                    <a href="publications.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Publications</a>
+                    <a href="team.html" class="text-sm font-medium text-lab-primary dark:text-emerald-400 transition uppercase tracking-wide font-bold">Team</a>
                     <a href="courses.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Courses</a>
                     <a href="index.html#grants" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">Grants</a>
                     <a href="index.html#news" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-lab-primary dark:hover:text-emerald-400 transition uppercase tracking-wide">News</a>
                     
-                    <!-- Dark Mode Toggle -->
                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none" title="Toggle Theme">
                         <i class="ph ph-moon text-xl dark:hidden"></i>
                         <i class="ph ph-sun text-xl hidden dark:block text-yellow-400"></i>
@@ -63,9 +62,16 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow pt-32 pb-12 animate-fade-in">
-        <div class="max-w-7xl mx-auto px-4 py-12">
-            <div id="publications-list" class="space-y-4">
-                <div class="text-center py-12">Loading publications...</div>
+        <div class="bg-slate-50 dark:bg-slate-950 py-8 transition-colors">
+             <div class="max-w-7xl mx-auto px-4 text-center">
+                <h2 class="text-4xl font-serif font-bold text-slate-900 dark:text-slate-100 mb-4">Our Team</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-lg">A diverse group of researchers passionate about Neuro-symbolic AI.</p>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div id="team-grid" class="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div class="text-center py-8 col-span-full">Loading...</div>
             </div>
         </div>
     </main>
@@ -73,7 +79,6 @@
     <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 transition-colors relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Developer Credit -->
             <div class="text-center mb-10 pb-8 border-b border-slate-800">
                 <p class="font-sans text-sm tracking-wide text-slate-400">
                     Designed & Developed by <a href="https://www.linkedin.com/in/aritra-dutta-bb988a190/" target="_blank" class="text-slate-200 hover:text-emerald-400 transition-colors font-semibold">Aritra Dutta</a>
@@ -82,30 +87,26 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 text-sm">
-            <div>
-                <div class="text-white font-serif font-bold text-lg mb-4">Tr<sup>2</sup>AIL Group</div>
-                <p>Dept. of CSE, IIT Kharagpur<br>West Bengal, India - 721302</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Links</h4>
-                <ul class="space-y-2">
-                    <li><a href="index.html" class="hover:text-white">Home</a></li>
-                    <li><a href="publications.html" class="hover:text-white">Publications</a></li>
-                    <li><a href="contact.html" class="hover:text-white">Contact</a></li>
-                    <li><a href="admin.html" class="hover:text-white text-xs opacity-50">Admin</a></li>
-                </ul>
-            </div>
-            <div>
-                <p class="mb-4">&copy; 2025 IIT Kharagpur AI Lab.</p>
-                <div class="flex space-x-4">
-                    <a href="#" class="hover:text-white"><i class="ph ph-twitter-logo text-xl"></i></a>
-                    <a href="#" class="hover:text-white"><i class="ph ph-github-logo text-xl"></i></a>
+                <div>
+                    <div class="text-white font-serif font-bold text-lg mb-4">Tr<sup>2</sup>AIL Group</div>
+                    <p>Dept. of CSE, IIT Kharagpur<br>West Bengal, India - 721302</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-white">Home</a></li>
+                        <li><a href="publications.html" class="hover:text-white">Publications</a></li>
+                        <li><a href="courses.html" class="hover:text-white">Courses</a></li>
+                        <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="mb-4">&copy; 2025 IIT Kharagpur AI Lab.</p>
                 </div>
             </div>
         </div>
-        </div>
     </footer>
 
-    <script type="module" src="/scripts/publications.js"></script>
+    <script type="module" src="/scripts/team.js"></script>
 </body>
 </html>

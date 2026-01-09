@@ -107,7 +107,7 @@ function initSlider() {
 initSlider();
 
 // --- ROUTER ---
-const views = ['home', 'team', 'projects', 'news', 'grants', 'courses'];
+const views = ['home', 'news', 'grants'];
 window.router = {
     navigate: (viewName) => {
         views.forEach(v => document.getElementById(`${v}-view`)?.classList.add('hidden'));
@@ -119,10 +119,8 @@ window.router = {
         }
         if(viewName === 'home') loadHomeNews();
         if(viewName === 'team') loadTeam(false);
-        if(viewName === 'projects') loadProjects();
         if(viewName === 'news') loadNews();
         if(viewName === 'grants') loadGrants(false);
-        if(viewName === 'courses') loadCourses();
         
         document.getElementById('mobile-menu').classList.add('hidden');
     }
@@ -133,6 +131,14 @@ window.onload = () => {
     loadTeam(true);
     loadGrants(true);
     loadPublications(true);
+
+    // Handle Hash Navigation (e.g. index.html#courses)
+    if(window.location.hash) {
+        const view = window.location.hash.substring(1);
+        if(views.includes(view)) {
+            router.navigate(view);
+        }
+    }
 };
 document.getElementById('mobile-menu-btn').addEventListener('click', () => {
     document.getElementById('mobile-menu').classList.toggle('hidden');
@@ -216,7 +222,7 @@ async function loadTeam(isHome = false) {
     const container = document.getElementById(containerId);
     if(!container || container.innerHTML) return;
     
-    const sEl = isHome ? null : document.getElementById('team-students');
+    // Only used for home preview now
     
     let data = mockData.team;
     if (isFirebaseActive) {
@@ -240,31 +246,7 @@ async function loadTeam(isHome = false) {
                 <p class="text-[10px] font-bold uppercase tracking-wider text-lab-primary dark:text-emerald-500 mt-1">${m.role}</p>
             `;
             container.appendChild(card);
-        } else {
-            card.className = "text-center p-4 bg-white dark:bg-slate-800 rounded shadow-sm border border-slate-100 dark:border-slate-700";
-            card.innerHTML = `<h4 class="font-bold text-slate-900 dark:text-slate-100">${m.name}</h4><p class="text-xs text-slate-500 dark:text-slate-400">${m.interests}</p>`;
-            if(m.role.toLowerCase() === 'faculty') container.appendChild(card); else if(sEl) sEl.appendChild(card);
         }
-    });
-}
-
-async function loadProjects() {
-    const listEl = document.getElementById('projects-list');
-    if(listEl.innerHTML) return;
-    
-    let data = mockData.projects;
-    if (isFirebaseActive) {
-        try {
-            const snap = await getDocs(collection(db, "projects"));
-            if(!snap.empty) data = snap.docs.map(doc => doc.data());
-        } catch(e) { console.error("Projects fetch error", e); }
-    }
-
-    data.forEach(p => {
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-slate-800 p-6 rounded shadow-sm border border-slate-100 dark:border-slate-700";
-        card.innerHTML = `<h3 class="font-bold text-slate-900 dark:text-slate-100">${p.title}</h3><p class="text-sm text-slate-600 dark:text-slate-400 mt-2">${p.desc}</p>`;
-        listEl.appendChild(card);
     });
 }
 
@@ -296,34 +278,6 @@ async function loadGrants(isHome = false) {
                 <div class="text-2xl font-bold text-lab-primary dark:text-emerald-400 mb-2">${g.amount}</div>
                 <h3 class="font-medium text-slate-900 dark:text-slate-100 text-sm leading-relaxed">${g.title}</h3>
             </div>
-        `;
-        listEl.appendChild(card);
-    });
-}
-
-async function loadCourses() {
-    const listEl = document.getElementById('courses-list');
-    if(!listEl || listEl.innerHTML) return;
-
-    let data = mockData.courses;
-    if (isFirebaseActive) {
-        try {
-            const snap = await getDocs(collection(db, "courses"));
-            if(!snap.empty) data = snap.docs.map(doc => doc.data());
-        } catch(e) {}
-    }
-
-    data.forEach(c => {
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition";
-        card.innerHTML = `
-            <div class="flex justify-between items-start mb-2">
-                <span class="bg-lab-primary/10 text-lab-primary dark:text-emerald-400 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">${c.code}</span>
-                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">${c.semester} ${c.year || ''}</span>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">${c.title}</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">${c.description}</p>
-            ${c.link ? `<a href="${c.link}" target="_blank" class="text-lab-primary dark:text-emerald-400 text-sm font-medium hover:underline">View Course Page &rarr;</a>` : ''}
         `;
         listEl.appendChild(card);
     });
