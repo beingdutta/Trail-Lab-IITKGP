@@ -25,9 +25,12 @@ const schemas = {
     team: [
         { key: 'name', label: 'Name', type: 'text' },
         { key: 'role', label: 'Role', type: 'select', options: ['Faculty', 'PhD', 'MS', 'RA', 'JRF', 'JPO', 'JPA'] },
-        { key: 'status', label: 'Status', type: 'select', options: ['Current Student', 'Ex Student', 'N/A'] },
-        { key: 'interests', label: 'Interests', type: 'text' },
-        { key: 'image', label: 'Image URL', type: 'text' }
+        { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Ex'] },
+        { key: 'interests', label: 'Interests (Comma separated)', type: 'text' },
+        { key: 'image', label: 'Image URL', type: 'text' },
+        { key: 'github', label: 'GitHub URL', type: 'text', optional: true },
+        { key: 'linkedin', label: 'LinkedIn URL', type: 'text', optional: true },
+        { key: 'x', label: 'X (Twitter) URL', type: 'text', optional: true }
     ],
     projects: [
         { key: 'title', label: 'Title', type: 'text' },
@@ -181,10 +184,10 @@ async function renderTab(collectionName) {
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-500 mb-1">${field.label}</label>
                         ${field.type === 'textarea' 
-                            ? `<textarea name="${field.key}" class="w-full p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white" rows="3" required></textarea>`
+                            ? `<textarea name="${field.key}" class="w-full p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white" rows="3" ${field.optional ? '' : 'required'}></textarea>`
                             : field.type === 'select'
                                 ? `<select name="${field.key}" class="w-full p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white">${field.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`
-                                : `<input type="${field.type}" name="${field.key}" class="w-full p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white" required>`
+                                : `<input type="${field.type}" name="${field.key}" class="w-full p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white" ${field.optional ? '' : 'required'}>`
                         }
                     </div>
                 `).join('')}

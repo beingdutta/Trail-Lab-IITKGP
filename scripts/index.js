@@ -7,10 +7,10 @@ const mockData = {
         { title: "Efficient Vision Transformers for Medical Imaging", authors: "K. Singh, M. Banerjee", venue: "CVPR 2024", year: 2024, area: "CV" }
     ],
     team: [
-        { name: "Prof. Somak Aditya", role: "faculty", interests: "NLP, Neuro-symbolic AI", image: "https://api.placeholder.com/150?text=SA" },
-        { name: "Prof. Priya Das", role: "faculty", interests: "CV, Medical AI", image: "https://api.placeholder.com/150?text=PD" },
-        { name: "Soham Gupta", role: "student", interests: "LLM Interpretability", image: "https://api.placeholder.com/150?text=SG" },
-        { name: "Kavita Singh", role: "student", interests: "Vision Transformers", image: "https://api.placeholder.com/150?text=KS" }
+        { name: "Prof. Somak Aditya", role: "faculty", interests: "NLP, Neuro-symbolic AI", image: "https://api.placeholder.com/150?text=SA", linkedin: "#" },
+        { name: "Prof. Priya Das", role: "faculty", interests: "CV, Medical AI", image: "https://api.placeholder.com/150?text=PD", linkedin: "#" },
+        { name: "Soham Gupta", role: "student", interests: "LLM Interpretability", image: "https://api.placeholder.com/150?text=SG", github: "#" },
+        { name: "Kavita Singh", role: "student", interests: "Vision Transformers", image: "https://api.placeholder.com/150?text=KS", linkedin: "#" }
     ],
     projects: [
         { title: "Project Vani", desc: "Open-source speech recognition for 50+ Indian dialects.", tags: ["NLP"], status: "Ongoing" },
@@ -244,6 +244,11 @@ async function loadTeam(isHome = false) {
                 </div>
                 <h3 class="font-bold text-slate-900 dark:text-slate-200 text-sm">${m.name}</h3>
                 <p class="text-[10px] font-bold uppercase tracking-wider text-lab-primary dark:text-emerald-500 mt-1">${m.role}</p>
+                <div class="flex justify-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    ${m.github ? `<a href="${m.github}" target="_blank" class="text-slate-400 hover:text-lab-primary dark:hover:text-emerald-400"><i class="ph ph-github-logo"></i></a>` : ''}
+                    ${m.linkedin ? `<a href="${m.linkedin}" target="_blank" class="text-slate-400 hover:text-lab-primary dark:hover:text-emerald-400"><i class="ph ph-linkedin-logo"></i></a>` : ''}
+                    ${m.x ? `<a href="${m.x}" target="_blank" class="text-slate-400 hover:text-lab-primary dark:hover:text-emerald-400"><i class="ph ph-x-logo"></i></a>` : ''}
+                </div>
             `;
             container.appendChild(card);
         }
