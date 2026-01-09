@@ -15,11 +15,25 @@ try {
 
 // --- SCHEMAS ---
 const schemas = {
+    publications: [
+        { key: 'title', label: 'Title', type: 'text' },
+        { key: 'authors', label: 'Authors', type: 'text' },
+        { key: 'venue', label: 'Venue', type: 'text' },
+        { key: 'year', label: 'Year', type: 'number' },
+        { key: 'area', label: 'Area', type: 'text' }
+    ],
     team: [
         { key: 'name', label: 'Name', type: 'text' },
-        { key: 'role', label: 'Role', type: 'select', options: ['faculty', 'student'] },
+        { key: 'role', label: 'Role', type: 'select', options: ['Faculty', 'PhD', 'MS', 'RA', 'JRF', 'JPO', 'JPA'] },
+        { key: 'status', label: 'Status', type: 'select', options: ['Current Student', 'Ex Student', 'N/A'] },
         { key: 'interests', label: 'Interests', type: 'text' },
         { key: 'image', label: 'Image URL', type: 'text' }
+    ],
+    projects: [
+        { key: 'title', label: 'Title', type: 'text' },
+        { key: 'desc', label: 'Description', type: 'textarea' },
+        { key: 'status', label: 'Status', type: 'text' },
+        { key: 'tags', label: 'Tags (comma separated)', type: 'text' }
     ],
     news: [
         { key: 'title', label: 'Title', type: 'text' },
@@ -49,6 +63,7 @@ const schemas = {
 };
 
 let currentTab = 'team';
+let editingId = null;
 
 // --- AUTH LOGIC ---
 const loginPanel = document.getElementById('admin-login-panel');
@@ -97,8 +112,21 @@ document.querySelectorAll('.admin-tab').forEach(btn => {
     });
 });
 
+// --- TOAST NOTIFICATION ---
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg text-white z-50 transition-opacity duration-500 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
 // --- CRUD LOGIC ---
 async function renderTab(collectionName) {
+    editingId = null;
     const container = document.getElementById('admin-content');
     container.innerHTML = '<div class="text-center p-4">Loading...</div>';
     
@@ -112,10 +140,16 @@ async function renderTab(collectionName) {
         console.error("Fetch error:", e);
     }
 
+    // Store items for edit retrieval
+    window.currentItems = items;
+
     let html = `
         <div class="mb-6">
-            <h3 class="text-xl font-bold mb-4 capitalize">Manage ${collectionName}</h3>
-            <form id="add-form" class="grid gap-4 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold capitalize">Manage ${collectionName}</h3>
+                <button id="cancel-edit-btn" class="hidden text-sm text-red-500 hover:underline">Cancel Edit</button>
+            </div>
+            <form id="crud-form" class="grid gap-4 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
                 ${schema.map(field => `
                     <div>
                         <label class="block text-xs font-bold uppercase text-slate-500 mb-1">${field.label}</label>
@@ -127,7 +161,7 @@ async function renderTab(collectionName) {
                         }
                     </div>
                 `).join('')}
-                <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-full md:w-auto">Add New Item</button>
+                <button type="submit" id="submit-btn" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition w-full md:w-auto">Add New Item</button>
             </form>
         </div>
         <div class="space-y-2">
@@ -138,6 +172,7 @@ async function renderTab(collectionName) {
                         <span class="text-xs text-slate-500 ml-2">${item[schema[1]?.key] || ''}</span>
                     </div>
                     <div class="flex gap-2 shrink-0">
+                        <button onclick="window.editItem('${collectionName}', '${item.id}')" class="text-blue-500 hover:text-blue-700 p-1"><i class="ph ph-pencil-simple text-lg"></i></button>
                         <button onclick="window.deleteItem('${collectionName}', '${item.id}')" class="text-red-500 hover:text-red-700 p-1"><i class="ph ph-trash text-lg"></i></button>
                     </div>
                 </div>
@@ -148,29 +183,72 @@ async function renderTab(collectionName) {
     
     container.innerHTML = html;
 
-    document.getElementById('add-form').addEventListener('submit', async (e) => {
+    const form = document.getElementById('crud-form');
+    const cancelBtn = document.getElementById('cancel-edit-btn');
+
+    cancelBtn.addEventListener('click', () => {
+        editingId = null;
+        form.reset();
+        const btn = document.getElementById('submit-btn');
+        btn.innerText = "Add New Item";
+        btn.classList.replace('bg-blue-600', 'bg-green-600');
+        btn.classList.replace('hover:bg-blue-700', 'hover:bg-green-700');
+        cancelBtn.classList.add('hidden');
+    });
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const data = {};
         schema.forEach(field => data[field.key] = formData.get(field.key));
         
         try {
-            await addDoc(collection(db, collectionName), data);
+            if (editingId) {
+                await updateDoc(doc(db, collectionName, editingId), data);
+                showToast("Item updated successfully!");
+            } else {
+                await addDoc(collection(db, collectionName), data);
+                showToast("Item added successfully!");
+            }
             renderTab(collectionName); // Refresh
         } catch (err) {
-            alert("Error adding item: " + err.message);
+            showToast("Error: " + err.message, 'error');
         }
     });
 }
+
+// Global edit function
+window.editItem = (collectionName, id) => {
+    const item = window.currentItems.find(i => i.id === id);
+    if (!item) return;
+
+    editingId = id;
+    const form = document.getElementById('crud-form');
+    const schema = schemas[collectionName];
+    
+    schema.forEach(field => {
+        const input = form.querySelector(`[name="${field.key}"]`);
+        if (input) input.value = item[field.key] || '';
+    });
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.innerText = "Update Item";
+    submitBtn.classList.replace('bg-green-600', 'bg-blue-600');
+    submitBtn.classList.replace('hover:bg-green-700', 'hover:bg-blue-700');
+    
+    document.getElementById('cancel-edit-btn').classList.remove('hidden');
+    form.scrollIntoView({ behavior: 'smooth' });
+};
 
 // Global delete function
 window.deleteItem = async (collectionName, id) => {
     if(confirm("Are you sure you want to delete this item?")) {
         try {
             await deleteDoc(doc(db, collectionName, id));
+            showToast("Item deleted successfully!");
             renderTab(collectionName);
         } catch (err) {
-            alert("Error deleting: " + err.message);
+            showToast("Error deleting: " + err.message, 'error');
         }
     }
 };

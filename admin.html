@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Tr²AIL Lab</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Config -->
+    <script src="scripts/tailwind-config.js"></script>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 font-sans antialiased min-h-screen transition-colors duration-300">
+
+    <div class="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
+        <a href="index.html" class="flex items-center text-slate-600 hover:text-lab-primary transition font-medium">
+            <i class="ph ph-arrow-left mr-2"></i> Back to Site
+        </a>
+        <h1 class="font-serif font-bold text-xl">Lab Admin</h1>
+    </div>
+
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <!-- Login Panel -->
+        <div id="admin-login-panel" class="max-w-md mx-auto bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 transition-colors mt-10">
+            <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">Admin Login</h2>
+            <form id="login-form" class="space-y-4">
+                <input type="email" id="admin-email" placeholder="Email" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                <input type="password" id="admin-password" placeholder="Password" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                <button type="submit" class="w-full bg-slate-900 dark:bg-slate-700 text-white p-2 rounded hover:bg-slate-800 dark:hover:bg-slate-600">Login</button>
+            </form>
+            <div id="login-error" class="text-red-500 text-sm mt-2 hidden"></div>
+        </div>
+        
+        <!-- Dashboard -->
+        <div id="admin-dashboard" class="hidden text-slate-900 dark:text-slate-100">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Dashboard</h2>
+                <button id="logout-btn" class="text-red-600 hover:text-red-800 font-medium">Logout</button>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex space-x-2 mb-6 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-700">
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="publications">Publications</button>
+                <button class="admin-tab px-4 py-2 rounded-lg bg-lab-primary text-white transition capitalize" data-tab="team">Team</button>
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="projects">Projects</button>
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="news">News</button>
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="grants">Grants</button>
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="works">Works</button>
+                <button class="admin-tab px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition capitalize" data-tab="faqs">FAQs</button>
+            </div>
+
+            <div id="admin-content" class="bg-white dark:bg-slate-800 rounded-xl shadow p-6 border border-slate-200 dark:border-slate-700">
+                <!-- Content injected by admin.js -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/scripts/admin.js"></script>
+</body>
+</html>
